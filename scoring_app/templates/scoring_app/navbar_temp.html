@@ -1,0 +1,46 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    {% bootstrap_messages %}
+
+    <link rel="stylesheet" type="text/css" href="{% static '/css/navbar_temp.css' %}"/>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+    
+</head>
+<body>
+{% csrf_token %}
+  <nav class="py-3 navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+      <!-- <h3><i class="far fa-wallet"></i></h3> -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="../home/">Главная</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="../form/">Анкета</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="../contact/">Контакты</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  {% block navbar %}
+
+  {% endblock %}
+
+</body>
+</html>

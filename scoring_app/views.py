@@ -1,8 +1,11 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 
-def index(request):
-    return HttpResponse("Something")
+def home(request):
+    return render(request, 'scoring_app/home.html')
 
-def showForm(request, form_id):
-    return HttpResponse("Form number %s." % form_id)
+def form(request):
+    return render(request, 'scoring_app/form.html')
+
+def contact(request):
+    return render(request, 'scoring_app/contact.html')

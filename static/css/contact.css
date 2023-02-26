@@ -1,0 +1,7 @@
+.card.border-primary {
+    border-color: #343a40 !important;
+}
+
+.fa.text-info, .btn.btn-info {
+    color: #343a40 !important;
+}
