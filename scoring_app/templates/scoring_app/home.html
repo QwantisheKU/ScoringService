@@ -1,0 +1,42 @@
+{% extends 'scoring_app/navbar_temp.html' %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Главная</title>
+</head>
+<body>
+  {% csrf_token %}
+
+  {% block navbar %}
+
+  <div class="container">
+      <div class="col text-center my-4">
+          <h2>Ваши расчеты</h2>
+      </div>
+      <table class="col table">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">№</th>
+            <th scope="col">Пользователь</th>
+            <th scope="col">Результат</th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">1</th>
+            <td scope="row">Oleg Veselov</td>
+            <td scope="row">D</td>
+            <td scope="row"><a class="btn btn-primary" href="#" role="button">Ссылка на расчет</a></td>
+          </tr>
+        </tbody>
+      </table>
+      
+      
+  </div>
+  
+  {% endblock %}
+
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    {% bootstrap_messages %}
+    <title>Home</title>
+
+</head>
+<body>
+    <div class="container my-3" style="width: 40%">
+    {% csrf_token %}
+
+    {% block form_temp %}
+
+    {% endblock %}
+      <!-- Анкета -->
+      <form method="post">
+        <div class="form-group">
+          <label for="exampleFormControlInput1">ФИО</label>
+          <input class="form-control" id="exampleFormControlInput1" placeholder="Самарина Анна Петровна" required>
+        </div>
+        <div class="form-group">
+          <label for="exampleFormControlInput1">Возраст</label>
+          <input class="form-control" id="exampleFormControlInput1" placeholder="32" required>
+        </div>
+        <div class="form-group">
+          <label for="exampleFormControlInput1">Годовой доход</label>
+          <input class="form-control" id="exampleFormControlInput1" placeholder="50000" required>
+        </div>
+        <div class="form-group">
+          <label for="exampleFormControlSelect1">Статус владения жильем</label>
+          <select class="form-control" id="exampleFormControlSelect1" required>
+            <option>Аренда</option>
+            <option>Ипотека</option>
+            <option>Собственность</option>
+            <option>Другое</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="exampleFormControlInput1">Трудоустройство (лет)</label>
+          <input class="form-control" id="exampleFormControlInput1" placeholder="" required>
+        </div>
+        <div class="form-group">
+          <label for="exampleFormControlSelect1">Цель использования</label>
+          <select class="form-control" id="exampleFormControlSelect1" required>
+            <option>Образование</option>
+            <option>Медицина</option>
+            <option>Инвестиции</option>
+            <option>Личная</option>
+            <option>Погашение долга</option>
+            <option>Ремонт</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="exampleFormControlInput1">Сумма кредита или займа ($)</label>
+          <input class="form-control" id="exampleFormControlInput1" placeholder="10000" required>
+        </div>
+        <div class="form-group">
+          <label for="exampleFormControlInput1">Процентная ставка</label>
+          <input class="form-control" id="exampleFormControlInput1" placeholder="7.5" required>
+        </div>
+        <div class="form-group">
+          <label for="exampleFormControlSelect1">Были ли просроченные долги</label>
+          <select class="form-control" id="exampleFormControlSelect1" required>
+            <option>Нет</option>
+            <option>Да</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="exampleFormControlInput1">Кредитная история</label>
+          <input class="form-control" id="exampleFormControlInput1" placeholder="2" required>
+        </div>
+        <div class="col text-center my-4">
+          <input class="btn btn-primary" type="submit" value="Рассчитать">
+        </div>
+      </form>
+      
+    </div>
+    
+
+</body>
+</html>
