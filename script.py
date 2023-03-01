@@ -5,9 +5,9 @@ import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
 
 def preprocess_data(data): 
-    with open("C:\\Users\\oleg.veselov\\Music\\Diploma_project\\scoring_project\\scoring.pkl", "rb") as f:
+    with open("./scoring.pkl", "rb") as f:
         model = pickle.load(f)
-    with open("C:\\Users\\oleg.veselov\\Music\\Diploma_project\\scoring_project\\one_hot.pkl", "rb") as f:
+    with open("./one_hot.pkl", "rb") as f:
         one_hot = pickle.load(f)
 
     df_columns = ['person_age', 'person_income', 'person_home_ownership',
