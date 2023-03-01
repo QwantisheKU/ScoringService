@@ -14,6 +14,7 @@
       <div class="col text-center my-4">
           <h2>Ваши расчеты</h2>
       </div>
+      
       <table class="col table">
         <thead class="thead-dark">
           <tr>
@@ -21,15 +22,19 @@
             <th scope="col">Пользователь</th>
             <th scope="col">Результат</th>
             <th scope="col"></th>
+            <th scope="col"></th>
           </tr>
         </thead>
         <tbody>
+          {% for calculation in calculations %}
           <tr>
-            <th scope="row">1</th>
-            <td scope="row">Oleg Veselov</td>
-            <td scope="row">D</td>
-            <td scope="row"><a class="btn btn-primary" href="#" role="button">Ссылка на расчет</a></td>
+            <th scope="row">{{ calculation.id }}</th>
+            <td>{{ calculation.person_name }}</td>
+            <td>D</td>
+            <td><a class="btn btn-primary" href="#" role="button">Ссылка на расчет</a></td>
+            <td><button type="button" class="btn btn-danger">X</button></td>
           </tr>
+          {% endfor %}
         </tbody>
       </table>
       

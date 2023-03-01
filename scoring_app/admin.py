@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import User, Form
+from .models import Person, Calculation, CalculationResult
 
-admin.site.register(User)
-admin.site.register(Form)
+admin.site.register(Person)
+admin.site.register(Calculation)
+admin.site.register(CalculationResult)

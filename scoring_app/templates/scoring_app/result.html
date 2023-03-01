@@ -1,0 +1,24 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Результат</title>
+</head>
+<body>
+
+  {% include 'scoring_app/navbar_temp.html' %}
+  
+  <div class="container">
+    <div class="col text-center my-4">
+      {% if score %}
+        <h2>Ваш кредитный риск-профиль</h2>
+        <h2>{{ score }}</h2>
+      {% else %}
+        <!-- TBD: An error message about not getting a result of calculation -->
+        <h2>Произошла непредвиденная ошибка. Повторите расчет позже</h2> 
+      {% endif %}
+    </div>
+
+</body>
+</html>
