@@ -35,7 +35,27 @@
             <a class="nav-link {% if request.resolver_match.url_name == 'contact' %} active {% endif %}" href="../contact/">Контакты</a>
           </li>
         </ul>
+        
+          {% if request.resolver_match.url_name != 'sign-up' and request.resolver_match.url_name != 'sign-in' %}
+            {% if user.is_authenticated %}
+            <div class="dropdown show">
+              <a class="btn btn-primary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Профиль
+              </a>
+            
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                <a class="dropdown-item" href="#">Профиль</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="../sign-out/">Выйти</a>
+              </div>
+            </div>
+        
+            {% else %}
+              <a class="btn btn-light float-right" href="../sign-up/" role="button">Вход</a>
+            {% endif %}
+          {% endif %}
       </div>
+      
     </div>
   </nav>
   {% block navbar %}

@@ -27,13 +27,15 @@
         </thead>
         <tbody>
           {% for calculation in calculations %}
+
           <tr>
             <th scope="row">{{ calculation.id }}</th>
             <td>{{ calculation.person_name }}</td>
-            <td>D</td>
+            <td>{{ calculation_result.score }}</td>
             <td><a class="btn btn-primary" href="#" role="button">Ссылка на расчет</a></td>
             <td><button type="button" class="btn btn-danger">X</button></td>
           </tr>
+
           {% endfor %}
         </tbody>
       </table>

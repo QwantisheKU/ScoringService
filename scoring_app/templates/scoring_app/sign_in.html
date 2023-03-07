@@ -6,8 +6,33 @@
     <title>Вход</title>
 </head>
 <body>
+    {% load crispy_forms_tags %}
 
-  {% include 'scoring_app/navbar_temp.html' %}
-
+    {% include 'scoring_app/navbar_temp.html' %}
+    <div class="col text-center my-4">
+        <h2>Вход</h2>
+    </div>
+    <div class="container my-3">
+    <form method="post" action="">
+        {% csrf_token %}
+        
+        
+        <div class="form-group">
+            {% csrf_token %}
+          <label for="exampleFormControlInput1">Email</label>
+          <input type="email" name="email" placeholder="example@gmail.com" class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="exampleFormControlInput1">Пароль</label>
+          <input type="password" name="password" placeholder="********" class="form-control">
+        </div>
+        <div class="col text-center my-4">
+            <input class="btn btn-primary" type="submit" value="Вход">
+          </div>
+          <div class="col text-center my-4">
+            <p>Еще не зарегистрированы? <a href="../sign-up/">Регистрация</a></p>
+          </div>
+      </form>
+</div>
 </body>
 </html>

@@ -5,3 +5,7 @@ body {
 .far.fa-wallet {
     background-color: #ebeff5 !important;
 }
+
+.dropdown:hover .dropdown-menu {
+    display: block;
+}
