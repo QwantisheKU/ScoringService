@@ -1,4 +1,5 @@
 from datetime import datetime
+import uuid
 from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.utils.translation import gettext_lazy as _
@@ -37,6 +38,7 @@ class UserManager(BaseUserManager):
         return self._create_user(email, password, **extra_fields)
 
 class User(AbstractUser):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     username = None
     email = models.EmailField(_('email address'), unique=True)
     USERNAME_FIELD = 'email'
@@ -44,6 +46,7 @@ class User(AbstractUser):
     objects = UserManager()
 
 class Person(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=30, null=True)
     email = models.EmailField(unique=True)
 
@@ -69,6 +72,7 @@ class Calculation(models.Model):
         ('DEBTCONSOLIDATION', 'Погашение долга'),
         ('HOMEIMPROVEMENT', 'Жилищный ремонт'),
     )
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     person_name = models.CharField(max_length=200)
     person_age = models.IntegerField()
     person_income = models.IntegerField()
@@ -80,16 +84,17 @@ class Calculation(models.Model):
     cb_person_default_on_file = models.CharField(max_length=30, choices=LOAN_DEFAULTS)
     cb_person_cred_hist_length = models.IntegerField()
     date_created = models.DateTimeField(default=datetime.now)
-    user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+    user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.person_name
     
 class CalculationResult(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     score = models.CharField(max_length=1)
     date_created = models.DateTimeField(default=datetime.now)
     user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
-    calculation_id = models.ForeignKey(Calculation, null=True, on_delete=models.SET_NULL)
+    calculation_id = models.ForeignKey(Calculation, null=True, on_delete=models.CASCADE)
 
     def __str__(self):
         return str(self.pk)

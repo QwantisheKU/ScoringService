@@ -11,9 +11,9 @@
   
   <div class="container">
     <div class="col text-center my-4">
-      {% if score %}
+      {% if calculation_result_form.score %}
         <h2>Ваш кредитный риск-профиль</h2>
-        <h2>{{ score }}</h2>
+        <h2>{{ calculation_result_form.instance.score }}</h2>
       {% else %}
         <!-- TBD: An error message about not getting a result of calculation -->
         <h2>Произошла непредвиденная ошибка. Повторите расчет позже</h2> 
