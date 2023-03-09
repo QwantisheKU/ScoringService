@@ -5,6 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from .models import Calculation, CalculationResult
 from .forms import CalculationForm, CalculationResultForm, SignUpForm, SignInForm
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist
 import pickle
 import script
 import time
@@ -45,37 +46,54 @@ def home(request):
     return render(request, 'scoring_app/home.html', context)
 
 @login_required(login_url='sign-in')
-def form(request):
+def calculation(request):
     calculation_form = CalculationForm()
+    calculation_result_form = CalculationResultForm()
+    
     context = {'form': calculation_form}
+    
     if request.method == 'POST':
         calculation_form = CalculationForm(request.POST)
+        calculation_id = None
         data = [int(request.POST.get('person_age')), int(request.POST.get('person_income')), request.POST.get('person_home_ownership'), int(request.POST.get('person_emp_length')), request.POST.get('loan_intent'), int(request.POST.get('loan_amnt')), float(request.POST.get('loan_int_rate')), request.POST.get('cb_person_default_on_file'), int(request.POST.get('cb_person_cred_hist_length'))]
         if calculation_form.is_valid():
             saved_calculation_form = calculation_form.save(commit=False)
             saved_calculation_form.user = request.user
             saved_calculation_form = calculation_form.save()
+            calculation_id = saved_calculation_form.pk
             request.session['data'] = data
-            return redirect(f'../result/?calculation_id={saved_calculation_form.pk}')
+        score = script.preprocess_data(data)[0]
+        score_dict = {'score': score, 'calculation_id': calculation_id}
+        calculation_result_form_query_dict = QueryDict('', mutable=True)
+        calculation_result_form_query_dict.update(score_dict)
+        calculation_result_form = CalculationResultForm(calculation_result_form_query_dict)
+        print(calculation_result_form.is_valid())
+        if calculation_result_form.is_valid():
+            saved_calculation_result_form = calculation_result_form.save(commit=False)
+            saved_calculation_result_form.user = request.user
+            saved_calculation_result_form.save()
+            return redirect(f'../result/{saved_calculation_form.pk}')
     return render(request, 'scoring_app/form.html', context)
 
-@login_required(login_url='sign-in')
-def calculation_result(request):
-    calculation_id = request.GET.get('calculation_id')
-    data = request.session.get('data')
-    calculation_result_form = CalculationResultForm()
-    score = script.preprocess_data(data)[0]
-    context = {'score': score}
-    score_dict = {'score': score, 'calculation_id': calculation_id}
-    calculation_result_form_query_dict = QueryDict('', mutable=True)
-    calculation_result_form_query_dict.update(score_dict)
-    calculation_result_form = CalculationResultForm(calculation_result_form_query_dict)
-    if calculation_result_form.is_valid():
-        saved_calculation_result_form = calculation_result_form.save(commit=False)
-        saved_calculation_result_form.user = request.user
-        saved_calculation_result_form.save()
-    return render(request, 'scoring_app/result.html', context)
 
 @login_required(login_url='sign-in')
 def contact(request):
     return render(request, 'scoring_app/contact.html')
+
+def get_calculation_result(request, calculation_id):
+    
+    try:
+        calculation_result = CalculationResult.objects.get(calculation_id = calculation_id)
+        calculation_result_form = CalculationResultForm(instance=calculation_result)
+        context = {'calculation_result_form': calculation_result_form}
+        return render(request, 'scoring_app/result.html', context)
+    except Exception:
+        return redirect('../home/')
+    
+def delete_calculation(request, calculation_id):
+    calculation = Calculation.objects.get(id = calculation_id)
+    context = {}
+    if request.method == "POST":
+        calculation.delete()
+        return redirect('../../home')
+    return render(request, 'scoring_app/delete_calculation.html', context)

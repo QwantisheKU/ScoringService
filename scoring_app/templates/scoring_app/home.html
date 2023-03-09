@@ -18,7 +18,6 @@
       <table class="col table">
         <thead class="thead-dark">
           <tr>
-            <th scope="col">№</th>
             <th scope="col">Пользователь</th>
             <th scope="col">Результат</th>
             <th scope="col"></th>
@@ -27,15 +26,12 @@
         </thead>
         <tbody>
           {% for calculation in calculations %}
-
           <tr>
-            <th scope="row">{{ calculation.id }}</th>
             <td>{{ calculation.person_name }}</td>
             <td>{{ calculation_result.score }}</td>
-            <td><a class="btn btn-primary" href="#" role="button">Ссылка на расчет</a></td>
-            <td><button type="button" class="btn btn-danger">X</button></td>
+            <td><a class="btn btn-primary" href="../result/{{ calculation.id }}" role="button">Ссылка на расчет</a></td>
+            <td><a class="btn btn-danger" href="../calculation/{{ calculation.id }}/delete" role="button">X</button></td>
           </tr>
-
           {% endfor %}
         </tbody>
       </table>
