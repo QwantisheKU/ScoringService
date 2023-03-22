@@ -45,10 +45,12 @@ class User(AbstractUser):
     REQUIRED_FIELDS = []
     objects = UserManager()
 
-class Person(models.Model):
+class Profile(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=30, null=True)
     email = models.EmailField(unique=True)
+    date_created = models.DateTimeField(default=datetime.now)
+    user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.email
@@ -99,3 +101,11 @@ class CalculationResult(models.Model):
     def __str__(self):
         return str(self.pk)
     
+class FeedbackForm(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    name = models.CharField(max_length=200)
+    email = models.EmailField()
+    message = models.TextField()
+    
+    def __str__(self):
+        return self.name

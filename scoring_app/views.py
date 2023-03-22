@@ -2,10 +2,13 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, QueryDict
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import authenticate, login, logout
-from .models import Calculation, CalculationResult
-from .forms import CalculationForm, CalculationResultForm, SignUpForm, SignInForm
+from .models import Calculation, CalculationResult, Profile
+from .forms import CalculationForm, CalculationResultForm, SignUpForm, SignInForm, ContactForm, ProfileForm
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.mail import send_mail, BadHeaderError
+from django.contrib.auth import get_user_model
+User = get_user_model()
 import pickle
 import script
 import time
@@ -78,10 +81,27 @@ def calculation(request):
 
 @login_required(login_url='sign-in')
 def contact(request):
-    return render(request, 'scoring_app/contact.html')
+    contact_form = ContactForm()
+    context = {'contact_form': contact_form}
+    if request.method == 'POST':
+        contact_form = ContactForm(request.POST)
+        if contact_form.is_valid():
+            subject = 'Feedback'
+            body = {
+                'name': contact_form.cleaned_data['name'],
+                'email': contact_form.cleaned_data['email'],
+                'message': contact_form.cleaned_data['message'],
+            }
+            message = '\n'.join(body.values())
 
+            try:
+                send_mail(subject, message, 'finn4443@gmail.com', ['finn4443@gmail.com'])
+            except BadHeaderError:
+                return redirect('../home/')
+    return render(request, 'scoring_app/contact.html', context)
+
+@login_required(login_url='sign-in')
 def get_calculation_result(request, calculation_id):
-    
     try:
         calculation_result = CalculationResult.objects.get(calculation_id = calculation_id)
         calculation_result_form = CalculationResultForm(instance=calculation_result)
@@ -90,6 +110,7 @@ def get_calculation_result(request, calculation_id):
     except Exception:
         return redirect('../home/')
     
+@login_required(login_url='sign-in')
 def delete_calculation(request, calculation_id):
     calculation = Calculation.objects.get(id = calculation_id)
     context = {}
@@ -97,3 +118,19 @@ def delete_calculation(request, calculation_id):
         calculation.delete()
         return redirect('../../home')
     return render(request, 'scoring_app/delete_calculation.html', context)
+
+@login_required(login_url='sign-in')
+def profile(request):
+    profile = Profile.objects.filter(user=request.user).exists()
+    profile_form = ProfileForm()
+    if not profile:
+        profile_dict = {'email': request.user.email, 'user': request.user}
+        profile_form_query_dict = QueryDict('', mutable=True)
+        profile_form_query_dict.update(profile_dict)
+        profile_form = ProfileForm(profile_form_query_dict)
+        if profile_form.is_valid():
+            saved_profile_form = profile_form.save(commit=False)
+            saved_profile_form.user = request.user
+            saved_profile_form.save()
+    context = {'user': request.user}
+    return render(request, 'scoring_app/profile.html', context)

@@ -1,0 +1,41 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Результат</title>
+    <link rel="stylesheet" type="text/css" href="{% static '/css/profile.css' %}"/>
+</head>
+<body>
+
+    {% include 'scoring_app/navbar_temp.html' %}
+
+
+    <div class="container-md my-4">
+        <div class="row justify-content-center">
+            <img src="{% static '/images/default.png' %}" class="rounded img-thumbnail " alt="default" style="max-width: 30%;">
+        </div>
+        <div class="row mb-3">
+            <label for="formFile" class="form-label">Выберите файл</label>
+            <input class="form-control" type="file" id="formFile">
+        </div>
+        <div class="row d-flex p-2">
+            <div class="col-3 mb-3">
+                <p>Имя: </p>
+            </div>
+            <div class="col">
+            </div>
+            <div class="col-3">
+                <input class="btn btn-primary" type="submit" value="Обновить">
+            </div>
+        </div>
+        <div class="row d-flex p-2">
+            <p>Email: {{ user.email }}</p>
+        </div>
+        
+    </div>
+
+    
+
+</body>
+</html>
