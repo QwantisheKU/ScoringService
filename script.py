@@ -16,7 +16,6 @@ def preprocess_data(data):
         'cb_person_cred_hist_length']
 
     test_row = pd.DataFrame([data], columns=df_columns)
-    #test_row = test_row.drop('loan_grade', axis=1)
 
     cat_vars = ['person_home_ownership', 'loan_intent', 'cb_person_default_on_file']
     oh2 = one_hot.transform(test_row[cat_vars])

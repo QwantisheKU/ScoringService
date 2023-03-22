@@ -26,13 +26,13 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-              <a class="nav-link {% if request.resolver_match.url_name == 'home' %} active {% endif %}" aria-current="page" href="../home/">Главная</a>
+              <a class="nav-link {% if request.resolver_match.url_name == 'home' %} active {% endif %}" aria-current="page" href="{% url 'home' %}">Главная</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link {% if request.resolver_match.url_name == 'form' %} active {% endif %}" href="../calculation/">Анкета</a>
+            <a class="nav-link {% if request.resolver_match.url_name == 'form' %} active {% endif %}" href="{% url 'calculation' %}">Анкета</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link {% if request.resolver_match.url_name == 'contact' %} active {% endif %}" href="../contact/">Контакты</a>
+            <a class="nav-link {% if request.resolver_match.url_name == 'contact' %} active {% endif %}" href="{% url 'contact' %}">Контакты</a>
           </li>
         </ul>
         
@@ -44,14 +44,14 @@
               </a>
             
               <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                <a class="dropdown-item" href="#">Профиль</a>
+                <a class="dropdown-item" href="{% url 'profile' %}">Профиль</a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="../sign-out/">Выйти</a>
+                <a class="dropdown-item" href="{% url 'sign-out' %}">Выйти</a>
               </div>
             </div>
         
             {% else %}
-              <a class="btn btn-light float-right" href="../sign-up/" role="button">Вход</a>
+              <a class="btn btn-light float-right" href="{% url 'sign-up' %}" role="button">Вход</a>
             {% endif %}
           {% endif %}
       </div>

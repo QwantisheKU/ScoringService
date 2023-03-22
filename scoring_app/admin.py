@@ -1,9 +1,9 @@
 from django.contrib import admin
-from .models import User, Person, Calculation, CalculationResult
+from .models import User, Profile, Calculation, CalculationResult
 from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
 from django.utils.translation import gettext_lazy as _
 
-admin.site.register(Person)
+admin.site.register(Profile)
 admin.site.register(Calculation)
 admin.site.register(CalculationResult)
 

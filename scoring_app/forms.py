@@ -1,5 +1,5 @@
 from django.forms import ModelForm
-from .models import Calculation, CalculationResult
+from .models import Calculation, CalculationResult, Profile
 from crispy_forms.helper import FormHelper
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
@@ -48,6 +48,12 @@ class SignUpForm(UserCreationForm):
         self.helper = FormHelper()
         self.helper.form_show_labels = False
 
+class ProfileForm(ModelForm):
+    name = forms.CharField(max_length=30, required=False)
+    class Meta:
+        model = Profile
+        fields = ['name', 'email']
+
 class CalculationForm(ModelForm):
     class Meta:
         model = Calculation
@@ -72,4 +78,9 @@ class CalculationResultForm(ModelForm):
     class Meta:
         model = CalculationResult
         fields = ['score', 'calculation_id']
+
+class ContactForm(forms.Form):
+    name = forms.CharField(max_length=50)
+    email = forms.CharField(max_length=150)
+    message = forms.CharField(max_length=2000)
 
