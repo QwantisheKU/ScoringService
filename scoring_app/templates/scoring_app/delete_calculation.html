@@ -1,21 +1,23 @@
+{% extends 'scoring_app/navbar_temp.html' %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Анкета</title>
+    {% block title %} Удаление расчета {% endblock %}
 </head>
 <body>
 
-    {% include 'scoring_app/navbar_temp.html' %}
-
-    <div class="container" style="text-align: center;">
+    {% block content %}
+    <div style="text-align: center;">
         <div class="col my-4" >
             <h2>Вы точно хотите удалить расчет?</h2>
         </div>   
-    <form method="post">
+    <form method="post" class="my-4">
         {% csrf_token %}
         <a role="button" class="btn btn-primary" href="../../home/">Отмена</a>
         <button type="submit" class="btn btn-secondary">Да</button>
       </form>
     </div>
+    {% endblock %}
 </body>
 </html>

@@ -1,41 +1,49 @@
+{% extends 'scoring_app/navbar_temp.html' %}
 {% load static %}
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Результат</title>
+    {% block title %} Профиль {% endblock %}
     <link rel="stylesheet" type="text/css" href="{% static '/css/profile.css' %}"/>
 </head>
 <body>
+    {% load crispy_forms_tags %}
 
-    {% include 'scoring_app/navbar_temp.html' %}
+    {% block content %}
 
-
-    <div class="container-md my-4">
-        <div class="row justify-content-center">
-            <img src="{% static '/images/default.png' %}" class="rounded img-thumbnail " alt="default" style="max-width: 30%;">
+        <div class="row justify-content-center my-4">
+            <img src="{{ request.user.profile.image.url }}" class="rounded img-thumbnail " alt="default" style="max-width: 30%;">
         </div>
-        <div class="row mb-3">
-            <label for="formFile" class="form-label">Выберите файл</label>
-            <input class="form-control" type="file" id="formFile">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+                <div class="row">
+                    <label for="formFile" class="form-label">Выберите файл</label>
+                    {{ profile_form.image|as_crispy_field }}
+                </div>
+                <div class="row">
+                    <div class="col-3">    
+                        <p>Имя: {{ profile_form.name|as_crispy_field }}</p>
+                        
+                    </div>
+                    
+                </div>
+
+                <div class="col text-center my-4">
+                    <input class="btn btn-primary" type="submit" value="Обновить">
+                  </div>
+
+        </form>
+        <div class="row d-flex p-2">
+            <p>Имя: {{ request.user.profile.name }}</p>
         </div>
         <div class="row d-flex p-2">
-            <div class="col-3 mb-3">
-                <p>Имя: </p>
-            </div>
-            <div class="col">
-            </div>
-            <div class="col-3">
-                <input class="btn btn-primary" type="submit" value="Обновить">
-            </div>
-        </div>
-        <div class="row d-flex p-2">
-            <p>Email: {{ user.email }}</p>
+            <p>Email: {{ request.user.profile.email }}</p>
         </div>
         
-    </div>
 
-    
+    {% endblock %}
 
 </body>
 </html>

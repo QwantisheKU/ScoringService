@@ -6,8 +6,10 @@ from .models import Calculation, CalculationResult, Profile
 from .forms import CalculationForm, CalculationResultForm, SignUpForm, SignInForm, ContactForm, ProfileForm
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.core.mail import send_mail, BadHeaderError
 from django.contrib.auth import get_user_model
+from .utils import paginate_calculations
 User = get_user_model()
 import pickle
 import script
@@ -45,7 +47,11 @@ def sign_out(request):
 @login_required(login_url='sign-in')
 def home(request):
     calculations = Calculation.objects.all().filter(user=request.user)
-    context = {'calculations': calculations}
+
+    results = 2
+    custom_range, calculations = paginate_calculations(request, calculations, results)
+
+    context = {'calculations': calculations, 'custom_range': custom_range}
     return render(request, 'scoring_app/home.html', context)
 
 @login_required(login_url='sign-in')
@@ -121,8 +127,9 @@ def delete_calculation(request, calculation_id):
 
 @login_required(login_url='sign-in')
 def profile(request):
-    profile = Profile.objects.filter(user=request.user).exists()
-    profile_form = ProfileForm()
+    user = request.user
+    profile = Profile.objects.filter(user=user).exists()
+    
     if not profile:
         profile_dict = {'email': request.user.email, 'user': request.user}
         profile_form_query_dict = QueryDict('', mutable=True)
@@ -132,5 +139,17 @@ def profile(request):
             saved_profile_form = profile_form.save(commit=False)
             saved_profile_form.user = request.user
             saved_profile_form.save()
-    context = {'user': request.user}
+        profile_form = saved_profile_form
+    else:
+        profile_form = Profile.objects.get(user=request.user)
+    
+    profile = request.user.profile
+    profile_form = ProfileForm(instance=profile)
+    context = {'profile_form': profile_form}
+
+    if request.method == 'POST':
+        profile_form = ProfileForm(request.POST, request.FILES, instance=profile)
+        if profile_form.is_valid():
+            profile_form.save()
+    
     return render(request, 'scoring_app/profile.html', context)

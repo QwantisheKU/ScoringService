@@ -1,18 +1,18 @@
+{% extends 'scoring_app/navbar_temp.html' %}
 {% load static %}
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Контакты</title>
+    {% block title %} Контакты {% endblock %}
     
     <link rel="stylesheet" type="text/css" href="{% static '/css/contact.css' %}"/>
 </head>
 <body>
     {% load crispy_forms_tags %}
 
-    {% include 'scoring_app/navbar_temp.html' %}
+    {% block content %}
   
-<div class="container">
   <div class="col text-center my-4">
     <h2>Контакты</h2>
 </div>
@@ -70,6 +70,7 @@
 
                 </div>
 	</div>
-</div>
+
+    {% endblock %}
 </body>
 </html>

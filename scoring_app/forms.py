@@ -50,9 +50,15 @@ class SignUpForm(UserCreationForm):
 
 class ProfileForm(ModelForm):
     name = forms.CharField(max_length=30, required=False)
+    image = forms.ImageField(required=False)
     class Meta:
         model = Profile
-        fields = ['name', 'email']
+        fields = ['name', 'image']
+    
+    def __init__(self, *args, **kwargs):
+        super(ProfileForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_show_labels = False 
 
 class CalculationForm(ModelForm):
     class Meta:
@@ -83,4 +89,9 @@ class ContactForm(forms.Form):
     name = forms.CharField(max_length=50)
     email = forms.CharField(max_length=150)
     message = forms.CharField(max_length=2000)
+
+    def __init__(self, *args, **kwargs):
+        super(ContactForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_show_labels = False
 

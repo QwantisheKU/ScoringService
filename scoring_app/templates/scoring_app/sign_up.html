@@ -1,19 +1,20 @@
+{% extends 'scoring_app/navbar_temp.html' %}
 {% load static %}
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Регистрация</title>
+    {% block title %} Регистрация {% endblock %}
     <link rel="stylesheet" type="text/css" href="{% static '/css/sign_up.css' %}"/>
 </head>
 <body>
     {% load crispy_forms_tags %}
 
-    {% include 'scoring_app/navbar_temp.html' %}
+    {% block content %}
         <div class="col text-center my-4">
             <h2>Регистрация</h2>
         </div>
-    <div class="container my-3">
+
         <form method="post" name="calc">
             {% csrf_token %}
             
@@ -38,6 +39,7 @@
               </div>
               {{ sign_up_form.errors }}
           </form>
-    </div>
+
+    {% endblock %}
 </body>
 </html>
