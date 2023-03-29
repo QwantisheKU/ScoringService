@@ -1,6 +1,8 @@
 from django.urls import path
 from . import views
 from .forms import SignInForm
+from django.conf.urls.static import static
+from django.conf import settings
 
 urlpatterns = [
     path('home/', views.home, name='home'),
@@ -13,3 +15,5 @@ urlpatterns = [
     path('calculation/<calculation_id>/delete', views.delete_calculation, name='delete_calculation'),
     path('profile/', views.profile, name='profile'),
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

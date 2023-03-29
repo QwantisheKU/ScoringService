@@ -1,21 +1,22 @@
 {% extends 'scoring_app/navbar_temp.html' %}
+{% load static %}
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Главная</title>
+    {% block title %} Главная {% endblock %}
+    <link rel="stylesheet" type="text/css" href="{% static '/css/home.css' %}"/>
 </head>
 <body>
   {% csrf_token %}
-
-  {% block navbar %}
-
-  <div class="container">
+  
+  {% block content %}
+    
       <div class="col text-center my-4">
           <h2>Ваши расчеты</h2>
       </div>
       
-      <table class="col table">
+      <table class="col table mb-4">
         <thead class="thead-dark">
           <tr>
             <th scope="col">Пользователь</th>
@@ -35,11 +36,43 @@
           {% endfor %}
         </tbody>
       </table>
-      
-      
-  </div>
-  
-  {% endblock %}
 
+      <!-- Пагинация -->
+      <div class="d-flex justify-content-center">
+        <nav class="pages" style="text-align: center;">
+          <ul class="pagination">
+            {% if calculations.has_previous %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{ calculations.previous_page_number }}" aria-label="Previous" style="color: black !important;">
+                <span aria-hidden="true">&laquo;</span>
+                <span class="sr-only">Previous</span>
+              </a>
+            </li>
+            {% endif %}
+            
+            {% for page in custom_range %}
+
+            {% if page == calculations.number %}
+            <li class="page-item active"><a class="page-link" href="?page={{ page }}" style="color: black !important; background-color: rgb(241, 240, 239) !important; border-color: black;">{{ page }}</a></li>
+            {% else %}
+            <li class="page-item"><a class="page-link" href="?page={{ page }}" style="color: black !important;">{{ page }}</a></li>
+            
+            {% endif %}
+            
+            {% endfor %}
+            
+            {% if calculations.has_next %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{ calculations.next_page_number }}" aria-label="Next" style="color: black !important;">
+                <span aria-hidden="true">&raquo;</span>
+                <span class="sr-only">Next</span>
+              </a>
+            </li>
+            {% endif %}
+          </ul>
+        </nav>
+      </div>
+
+  {% endblock %}
 </body>
 </html>

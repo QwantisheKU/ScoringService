@@ -49,8 +49,9 @@ class Profile(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=30, null=True)
     email = models.EmailField(unique=True)
+    image = models.ImageField(default='default.png', null=True)
     date_created = models.DateTimeField(default=datetime.now)
-    user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.email
@@ -90,6 +91,9 @@ class Calculation(models.Model):
 
     def __str__(self):
         return self.person_name
+    
+    class Meta:
+        ordering = ['-date_created']
     
 class CalculationResult(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

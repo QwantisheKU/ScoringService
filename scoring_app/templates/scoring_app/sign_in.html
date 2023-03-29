@@ -1,18 +1,18 @@
+{% extends 'scoring_app/navbar_temp.html' %}
 {% load static %}
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Вход</title>
+    {% block title %} Вход {% endblock %}
 </head>
 <body>
     {% load crispy_forms_tags %}
 
-    {% include 'scoring_app/navbar_temp.html' %}
+    {% block content %}
     <div class="col text-center my-4">
         <h2>Вход</h2>
     </div>
-    <div class="container my-3">
     <form method="post" action="">
         {% csrf_token %}
         
@@ -33,6 +33,6 @@
             <p>Еще не зарегистрированы? <a href="../sign-up/">Регистрация</a></p>
           </div>
       </form>
-</div>
+  {% endblock %}
 </body>
 </html>

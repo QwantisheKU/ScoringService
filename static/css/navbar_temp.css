@@ -9,3 +9,16 @@ body {
 .dropdown:hover .dropdown-menu {
     display: block;
 }
+
+#container-bg {
+    background-color: #ebeff5 !important;
+}
+
+body {
+    background: url('../images/background.jpg');
+  }
+
+form {
+    display: block;
+    align-items: center;
+}

@@ -1,13 +1,14 @@
+{% extends 'scoring_app/navbar_temp.html' %}
 {% load static %}
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Результат</title>
+  {% block title %} Результат {% endblock %}
 </head>
 <body>
 
-  {% include 'scoring_app/navbar_temp.html' %}
+  {% block content %}
   
   <div class="container">
     <div class="col text-center my-4">
@@ -20,5 +21,6 @@
       {% endif %}
     </div>
 
+  {% endblock %}
 </body>
 </html>
