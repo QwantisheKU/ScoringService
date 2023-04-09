@@ -13,8 +13,16 @@
     {% block content %}
 
         <div class="row justify-content-center my-4">
-            <img src="{{ request.user.profile.image.url }}" class="rounded img-thumbnail " alt="default" style="max-width: 30%;">
+            <img src="{% if request.user.profile.image.url is not None %} {{ request.user.profile.image.url }} {% else %} {{ default.png }} {% endif %}" class="rounded img-thumbnail " alt="default" style="max-width: 30%;">
         </div>
+        
+        <div class="row d-flex p-2">
+            <hr>
+            <b><p>Имя: </b> {{ request.user.profile.name }}</p>
+            <b><p>Email: </b> {{ request.user.profile.email }}</p>
+            <hr>
+        </div>
+        
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
 
@@ -35,14 +43,6 @@
                   </div>
 
         </form>
-        <div class="row d-flex p-2">
-            <p>Имя: {{ request.user.profile.name }}</p>
-        </div>
-        <div class="row d-flex p-2">
-            <p>Email: {{ request.user.profile.email }}</p>
-        </div>
-        
-
     {% endblock %}
 
 </body>

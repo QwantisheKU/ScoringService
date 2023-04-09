@@ -9,11 +9,16 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.core.mail import send_mail, BadHeaderError
 from django.contrib.auth import get_user_model
-from .utils import paginate_calculations
+from .utils import paginate_calculations, check_recommendations, create_word_results
+from django.http import FileResponse
+from django_ratelimit.decorators import ratelimit
+from docx2pdf import convert
 User = get_user_model()
 import pickle
 import script
 import time
+import os
+import glob
 
 def sign_up(request):
     sign_up_form = SignUpForm()
@@ -46,19 +51,18 @@ def sign_out(request):
 
 @login_required(login_url='sign-in')
 def home(request):
-    calculations = Calculation.objects.all().filter(user=request.user)
+    calculations_results = CalculationResult.objects.all().filter(user=request.user).order_by('-date_created')
 
-    results = 2
-    custom_range, calculations = paginate_calculations(request, calculations, results)
+    results = 5
+    custom_range, calculations_results = paginate_calculations(request, calculations_results, results)
 
-    context = {'calculations': calculations, 'custom_range': custom_range}
+    context = {'calculations_results': calculations_results, 'custom_range': custom_range}
     return render(request, 'scoring_app/home.html', context)
 
 @login_required(login_url='sign-in')
 def calculation(request):
     calculation_form = CalculationForm()
     calculation_result_form = CalculationResultForm()
-    
     context = {'form': calculation_form}
     
     if request.method == 'POST':
@@ -108,14 +112,42 @@ def contact(request):
 
 @login_required(login_url='sign-in')
 def get_calculation_result(request, calculation_id):
+    recommendations = check_recommendations(request, calculation_id)
     try:
         calculation_result = CalculationResult.objects.get(calculation_id = calculation_id)
         calculation_result_form = CalculationResultForm(instance=calculation_result)
-        context = {'calculation_result_form': calculation_result_form}
+        request.session['score'] = calculation_result.score
+        request.session['recommendations'] = recommendations
+        context = {'calculation_result_form': calculation_result_form, 'recommendations': recommendations}
         return render(request, 'scoring_app/result.html', context)
     except Exception:
         return redirect('../home/')
-    
+
+@login_required(login_url='sign-in')
+def download_result(request):
+    # Works poorly with pdf convertion, problem with simultaneous proccesses
+    # TODO
+    files = glob.glob('static/files/*.pdf')
+    for f in files:
+        os.remove(f)
+    print_query = {}
+    score = request.session.get('score')
+    recommendations = request.session.get('recommendations')
+    print_query['score'] = score
+    print_query['recommendations'] = recommendations
+    create_word_results(print_query)
+    word_file = FileResponse(open('static/files/Результат расчета.docx', 'rb'))
+    #convert('static/files/Результат расчета.docx', 'static/files/Результат расчета.pdf')
+    #pdf_file = FileResponse(open('static/files/Результат расчета.pdf', 'rb'))
+    final_format = None
+    if request.method == "GET":
+        format = request.GET.get('format')
+        if format == 'word':
+            final_format = word_file
+        #elif format == 'pdf':
+            #final_format = pdf_file
+    return final_format
+
 @login_required(login_url='sign-in')
 def delete_calculation(request, calculation_id):
     calculation = Calculation.objects.get(id = calculation_id)
@@ -151,5 +183,7 @@ def profile(request):
         profile_form = ProfileForm(request.POST, request.FILES, instance=profile)
         if profile_form.is_valid():
             profile_form.save()
+            return redirect('../profile/')
     
     return render(request, 'scoring_app/profile.html', context)
+
