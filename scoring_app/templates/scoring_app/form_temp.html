@@ -37,7 +37,7 @@
           {{ form.person_age|as_crispy_field }}
           <!--<input class="form-control" id="exampleFormControlInput1" placeholder="32" required>-->
         </div>
-        <div class="orm-group">
+        <div class="form-group">
           <label for="exampleFormControlInput1">Годовой доход ($)</label>
           {{ form.person_income|as_crispy_field }}
           <!--<input class="form-control" id="exampleFormControlInput1" placeholder="50000" required>-->
@@ -77,6 +77,11 @@
         <div class="form-group">
           <label for="exampleFormControlInput1">Процентная ставка</label>
           {{ form.loan_int_rate|as_crispy_field }}
+          <!--<input class="form-control" id="exampleFormControlInput1" placeholder="7.5" required>-->
+        </div>
+        <div class="form-group">
+          <label for="exampleFormControlInput1">Продолжительность кредита или займа (в месяцах)</label>
+          {{ form.loan_term|as_crispy_field }}
           <!--<input class="form-control" id="exampleFormControlInput1" placeholder="7.5" required>-->
         </div>
         <div class="form-group">

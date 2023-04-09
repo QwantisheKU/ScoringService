@@ -19,8 +19,34 @@
         <!-- TBD: An error message about not getting a result of calculation -->
         <h2>Произошла непредвиденная ошибка. Повторите расчет позже</h2> 
       {% endif %}
-    </div>
 
+    </div>
+    {% for recommendation in recommendations.values %}
+    <div class="accordion " id="accordionExample">
+      
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingOne">
+          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse" aria-expanded="true" aria-controls="collapseOne">
+            Рекомендация {{ forloop.counter }}
+          </button>
+        </h2>
+        <div id="collapse" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+          <div class="accordion-body text-justify">
+            {{ recommendation }}
+          </div>
+        </div>
+      </div>
+      
+    </div>
+    {% endfor %}
+    <div class="mb-4"></div>
+    <div class="col text-center my-4">
+      <a class="btn btn-primary" href="../download-result/?format=word" role="button">Скачать WORD</a>
+      <!--<a class="btn btn-primary" href="../download-result/?format=pdf" role="button">Скачать PDF</a>-->
+    </div>
   {% endblock %}
+  
 </body>
+
+</script>
 </html>

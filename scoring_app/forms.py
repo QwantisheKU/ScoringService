@@ -71,6 +71,7 @@ class CalculationForm(ModelForm):
     'loan_intent',
     'loan_amnt',
     'loan_int_rate',
+    'loan_term',
     'cb_person_default_on_file',
     'cb_person_cred_hist_length',
     ]

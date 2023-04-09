@@ -14,6 +14,7 @@ urlpatterns = [
     path('sign-out/', views.sign_out, name='sign-out'),
     path('calculation/<calculation_id>/delete', views.delete_calculation, name='delete_calculation'),
     path('profile/', views.profile, name='profile'),
+    path('download-result/', views.download_result, name='download_result'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

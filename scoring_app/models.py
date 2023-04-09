@@ -84,6 +84,7 @@ class Calculation(models.Model):
     loan_intent = models.CharField(max_length=30, choices=LOAN_INTENTS)
     loan_amnt = models.IntegerField()
     loan_int_rate = models.FloatField()
+    loan_term = models.IntegerField()
     cb_person_default_on_file = models.CharField(max_length=30, choices=LOAN_DEFAULTS)
     cb_person_cred_hist_length = models.IntegerField()
     date_created = models.DateTimeField(default=datetime.now)
@@ -110,6 +111,8 @@ class FeedbackForm(models.Model):
     name = models.CharField(max_length=200)
     email = models.EmailField()
     message = models.TextField()
+    user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
+    date_created = models.DateTimeField(default=datetime.now)
     
     def __str__(self):
         return self.name

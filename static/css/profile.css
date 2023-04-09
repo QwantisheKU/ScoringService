@@ -7,8 +7,3 @@ img {
 body {
   background: url('../images/background.jpg');
 }
-
-#cnbg {
-  background-color: antiquewhite !important;
-  border-radius: 2;
-}
