@@ -125,7 +125,7 @@ def get_calculation_result(request, calculation_id):
 
 @login_required(login_url='sign-in')
 def download_result(request):
-    # Works poorly with pdf convertion, problem with simultanious proccesses
+    # Works poorly with pdf convertion, problem with simultaneous proccesses
     # TODO
     files = glob.glob('static/files/*.pdf')
     for f in files:
