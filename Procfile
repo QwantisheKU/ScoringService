@@ -1,0 +1,1 @@
+web: gunicorn 'scoring_app.wsgi'
