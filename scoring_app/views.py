@@ -3,15 +3,16 @@ from django.http import HttpResponse, QueryDict
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import authenticate, login, logout
 from .models import Calculation, CalculationResult, Profile
-from .forms import CalculationForm, CalculationResultForm, SignUpForm, SignInForm, ContactForm, ProfileForm
+from .forms import CalculationForm, CalculationResultForm, SignUpForm, SignInForm, ContactForm, ProfileForm, NewPasswordChangeForm
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.core.mail import send_mail, BadHeaderError
 from django.contrib.auth import get_user_model
-from .utils import paginate_calculations, check_recommendations, create_word_results
+from .utils import paginate_calculations, check_recommendations, create_word_results, get_plot, search_calculations
 from django.http import FileResponse
-from django_ratelimit.decorators import ratelimit
+from django.contrib.auth.views import PasswordChangeView
+import pythoncom
 from docx2pdf import convert
 User = get_user_model()
 import pickle
@@ -19,6 +20,9 @@ import script
 import time
 import os
 import glob
+
+class NewPasswordChangeView(PasswordChangeView):
+    form_class = NewPasswordChangeForm
 
 def sign_up(request):
     sign_up_form = SignUpForm()
@@ -51,12 +55,13 @@ def sign_out(request):
 
 @login_required(login_url='sign-in')
 def home(request):
-    calculations_results = CalculationResult.objects.all().filter(user=request.user).order_by('-date_created')
+
+    search_query, calculations_results = search_calculations(request)
 
     results = 5
-    custom_range, calculations_results = paginate_calculations(request, calculations_results, results)
+    custom_range, calculations_results, paginator = paginate_calculations(request, calculations_results, results)
 
-    context = {'calculations_results': calculations_results, 'custom_range': custom_range}
+    context = {'calculations_results': calculations_results, 'custom_range': custom_range, 'paginator': paginator, 'search_query': search_query}
     return render(request, 'scoring_app/home.html', context)
 
 @login_required(login_url='sign-in')
@@ -80,7 +85,6 @@ def calculation(request):
         calculation_result_form_query_dict = QueryDict('', mutable=True)
         calculation_result_form_query_dict.update(score_dict)
         calculation_result_form = CalculationResultForm(calculation_result_form_query_dict)
-        print(calculation_result_form.is_valid())
         if calculation_result_form.is_valid():
             saved_calculation_result_form = calculation_result_form.save(commit=False)
             saved_calculation_result_form.user = request.user
@@ -113,12 +117,14 @@ def contact(request):
 @login_required(login_url='sign-in')
 def get_calculation_result(request, calculation_id):
     recommendations = check_recommendations(request, calculation_id)
+    plot = get_plot(calculation_id, format='')
     try:
         calculation_result = CalculationResult.objects.get(calculation_id = calculation_id)
         calculation_result_form = CalculationResultForm(instance=calculation_result)
+        request.session['calculation_id'] = calculation_id
         request.session['score'] = calculation_result.score
         request.session['recommendations'] = recommendations
-        context = {'calculation_result_form': calculation_result_form, 'recommendations': recommendations}
+        context = {'calculation_result_form': calculation_result_form, 'recommendations': recommendations, 'plot': plot}
         return render(request, 'scoring_app/result.html', context)
     except Exception:
         return redirect('../home/')
@@ -127,31 +133,33 @@ def get_calculation_result(request, calculation_id):
 def download_result(request):
     # Works poorly with pdf convertion, problem with simultaneous proccesses
     # TODO
-    files = glob.glob('static/files/*.pdf')
-    for f in files:
-        os.remove(f)
     print_query = {}
+    calculation_id = request.session.get('calculation_id')
     score = request.session.get('score')
     recommendations = request.session.get('recommendations')
     print_query['score'] = score
     print_query['recommendations'] = recommendations
+    plot = get_plot(calculation_id, format='word')
+    print_query['plot'] = plot
+
     create_word_results(print_query)
     word_file = FileResponse(open('static/files/Результат расчета.docx', 'rb'))
-    #convert('static/files/Результат расчета.docx', 'static/files/Результат расчета.pdf')
+    #pythoncom.CoInitialize()
+    #convert('static/files/Результат расчета copy.docx', 'static/files/Результат расчета.pdf')
     #pdf_file = FileResponse(open('static/files/Результат расчета.pdf', 'rb'))
-    final_format = None
-    if request.method == "GET":
-        format = request.GET.get('format')
-        if format == 'word':
-            final_format = word_file
+    #final_format = None
+    #if request.method == "GET":
+        #format = request.GET.get('format')
+        #if format == 'word':
+            #final_format = word_file
         #elif format == 'pdf':
             #final_format = pdf_file
-    return final_format
+    return word_file
 
 @login_required(login_url='sign-in')
 def delete_calculation(request, calculation_id):
     calculation = Calculation.objects.get(id = calculation_id)
-    context = {}
+    context = {'calculation': calculation}
     if request.method == "POST":
         calculation.delete()
         return redirect('../../home')
@@ -186,4 +194,6 @@ def profile(request):
             return redirect('../profile/')
     
     return render(request, 'scoring_app/profile.html', context)
+
+
 

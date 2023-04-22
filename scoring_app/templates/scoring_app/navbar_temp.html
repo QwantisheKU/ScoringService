@@ -43,7 +43,7 @@
           {% if request.resolver_match.url_name != 'sign-up' and request.resolver_match.url_name != 'sign-in' %}
             {% if user.is_authenticated %}
             <div class="dropdown show">
-              <a class="btn btn-primary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <a class="btn btn-primary dropdown-toggle" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Профиль
               </a>
             
@@ -55,7 +55,7 @@
             </div>
         
             {% else %}
-              <a class="btn btn-light float-right" href="{% url 'sign-up' %}" role="button">Вход</a>
+              <a class="btn btn-primary float-right" href="{% url 'sign-up' %}" role="button">Вход</a>
             {% endif %}
           {% endif %}
       </div>
@@ -63,7 +63,7 @@
     </div>
   </nav>
     
-  <div class="container my-4" style="background-color: rgb(241, 240, 239) !important; border: 1px solid !important; border-radius: 1%;">
+  <div class="container-md my-4" style="background-color: rgb(241, 240, 239) !important; border: 1px solid !important; border-radius: 1%;">
 
     {% block content %}
       
@@ -71,5 +71,6 @@
 
   </div>
 
+  
 </body>
 </html>

@@ -20,12 +20,14 @@
 
     {% block content %}
     <div class="col text-center my-4">
+      <hr>
       <h2>Анкета</h2>
+      <hr>
     </div>
       <!-- Анкета -->
     <div class="row">
     <div class="mx-auto col-10 col-md-8 col-lg-6">
-      <form method="post" name="calc" class="form-centered">
+      <form method="post" name="calc">
         {% csrf_token %}
         <div class="form-group">
           <label for="exampleFormControlInput1">ФИО</label>

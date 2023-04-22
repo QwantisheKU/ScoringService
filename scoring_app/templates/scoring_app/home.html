@@ -11,11 +11,26 @@
   {% csrf_token %}
   
   {% block content %}
-    
+
       <div class="col text-center my-4">
+        <hr>
           <h2>Ваши расчеты</h2>
+        <hr>
+        </div>
+        
+      <div class="row">
+      <div class="mx-auto col-10 col-md-8 col-lg-6">
+        <form id="searchForm" class="form" method="get" action="{% url 'home' %}">
+          <div class="input-group mb-4 my-4">
+            <input type="text" class="form-control dark" name="search_query" placeholder="Поиск расчета по имени или результату" value="{{ search_query }}">
+            <div class="input-group-append">
+              <button class="btn btn-primary" type="submit">Найти</button>
+            </div>
+          </div>
+        </form>
       </div>
-      
+      </div>
+
       <table class="col table mb-4">
         <thead class="thead-dark">
           <tr>
@@ -38,12 +53,13 @@
       </table>
 
       <!-- Пагинация -->
+      {% if paginator.num_pages > 1 %}
       <div class="d-flex justify-content-center">
         <nav class="pages" style="text-align: center;">
           <ul class="pagination">
             {% if calculations_results.has_previous %}
             <li class="page-item">
-              <a class="page-link" href="?page={{ calculations_results.previous_page_number }}" aria-label="Previous" style="color: black !important;">
+              <a class="page-link" href="?page={{ calculations_results.previous_page_number }}"  data-page="{{ calculations_results.previous_page_number }}" aria-label="Previous" style="color: black !important;">
                 <span aria-hidden="true">&laquo;</span>
                 <span class="sr-only">Previous</span>
               </a>
@@ -53,9 +69,9 @@
             {% for page in custom_range %}
 
             {% if page == calculations.number %}
-            <li class="page-item active"><a class="page-link" href="?page={{ page }}" style="color: black !important; background-color: rgb(241, 240, 239) !important; border-color: black;">{{ page }}</a></li>
+            <li class="page-item active"><a class="page-link" href="?page={{ page }}" data-page="{{ page }}" style="color: black !important; background-color: rgb(241, 240, 239) !important; border-color: black;">{{ page }}</a></li>
             {% else %}
-            <li class="page-item"><a class="page-link" href="?page={{ page }}" style="color: black !important;">{{ page }}</a></li>
+            <li class="page-item"><a class="page-link" href="?page={{ page }}" data-page="{{ page }}" style="color: black !important;">{{ page }}</a></li>
             
             {% endif %}
             
@@ -63,7 +79,7 @@
             
             {% if calculations_results.has_next %}
             <li class="page-item">
-              <a class="page-link" href="?page={{ calculations_results.next_page_number }}" aria-label="Next" style="color: black !important;">
+              <a class="page-link" href="?page={{ calculations_results.next_page_number }}"  data-page="{{ calculations_results.next_page_number }}" aria-label="Next" style="color: black !important;">
                 <span aria-hidden="true">&raquo;</span>
                 <span class="sr-only">Next</span>
               </a>
@@ -72,7 +88,8 @@
           </ul>
         </nav>
       </div>
-
+      {% endif %}
+      <script src="{% static 'js/home.js' %}"></script>
   {% endblock %}
 </body>
 </html>

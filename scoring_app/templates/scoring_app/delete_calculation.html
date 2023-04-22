@@ -11,7 +11,9 @@
     <div style="text-align: center;">
         <div class="col my-4" >
             <h2>Вы точно хотите удалить расчет?</h2>
-        </div>   
+        </div>
+    <p>Имя: {{ calculation.person_name }}</p>
+    <p>Дата создания: {{ calculation.date_created|date:"m.d.Y" }}</p>
     <form method="post" class="my-4">
         {% csrf_token %}
         <a role="button" class="btn btn-primary" href="../../home/">Отмена</a>
