@@ -14,13 +14,15 @@
 
     {% block content %}
   
-  <div class="col text-center my-4">
-    <h2>Контакты</h2>
-</div>
+    <div class="col text-center my-4">
+        <hr>
+        <h2>Контакты</h2>
+        <hr>
+    </div>
 	<div class="row justify-content-center">
 		<div class="mx-auto col-10 col-md-8 col-lg-6 pb-5">
 
-                    <form method="post" action="" >
+                    <form method="post" action="">
                         {% csrf_token %}
                         <div class="card border-primary rounded-0" style="border-color: #343a40 !important;">
                             <div class="card-header p-0">

@@ -11,7 +11,9 @@
 
     {% block content %}
     <div class="col text-center my-4">
+        <hr>
         <h2>Вход</h2>
+        <hr>
     </div>
     <form method="post" action="">
         {% csrf_token %}
@@ -31,6 +33,7 @@
           </div>
           <div class="col text-center my-4">
             <p>Еще не зарегистрированы? <a href="../sign-up/">Регистрация</a></p>
+            <p>Забыли пароль? <a href="{% url 'reset_password' %}">Восстановить</a></p>
           </div>
       </form>
   {% endblock %}

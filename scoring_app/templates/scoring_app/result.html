@@ -9,8 +9,7 @@
 <body>
 
   {% block content %}
-  
-  <div class="container">
+  <div class="container-md">
     <div class="col text-center my-4">
       {% if calculation_result_form.score %}
         <h2>Ваш кредитный риск-профиль</h2>
@@ -22,7 +21,7 @@
 
     </div>
     {% for recommendation in recommendations.values %}
-    <div class="accordion " id="accordionExample">
+    <div class="accordion" id="accordionExample">
       
       <div class="accordion-item">
         <h2 class="accordion-header" id="headingOne">
@@ -36,7 +35,6 @@
           </div>
         </div>
       </div>
-      
     </div>
     {% endfor %}
     <div class="mb-4"></div>
@@ -44,6 +42,16 @@
       <a class="btn btn-primary" href="../download-result/?format=word" role="button">Скачать WORD</a>
       <!--<a class="btn btn-primary" href="../download-result/?format=pdf" role="button">Скачать PDF</a>-->
     </div>
+
+    {% if plot %}
+    <div class="col text-center my-4">
+      <hr>
+      <h2>Статистика</h2>
+      <hr>
+      <img src="data:image/png;base64, {{plot|safe}}">
+    </div>
+    {% endif %}
+
   {% endblock %}
   
 </body>

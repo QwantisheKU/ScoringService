@@ -3,6 +3,7 @@ from .models import Calculation, CalculationResult, Profile
 from crispy_forms.helper import FormHelper
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
@@ -96,3 +97,21 @@ class ContactForm(forms.Form):
         self.helper = FormHelper()
         self.helper.form_show_labels = False
 
+class NewPasswordChangeForm(PasswordChangeForm):
+    password1 = forms.CharField(
+        help_text='Введите пароль',
+        required = True,
+        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': '********'}),
+    )
+    password2 = forms.CharField(
+        required = True,
+        help_text='Повторите пароль',
+        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': '********'}),
+    )
+    class Meta:
+        fields = ['password1', 'password2']
+
+    def __init__(self, *args, **kwargs):
+        super(NewPasswordChangeForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_show_labels = False
